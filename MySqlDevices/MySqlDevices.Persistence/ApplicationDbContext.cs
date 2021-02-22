@@ -23,7 +23,6 @@ namespace MySqlDevices.Persistence
 
             //Todo
             
-
         }
     }
 }

@@ -27,12 +27,7 @@ namespace MySqlDevices.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews()
-                .AddFluentValidation(s =>
-                {
-                    s.RegisterValidatorsFromAssemblyContaining<PersonValidator>();
-                    s.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
-                }); ;
+            services.AddControllersWithViews();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
