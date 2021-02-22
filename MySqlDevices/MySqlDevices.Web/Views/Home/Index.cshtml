@@ -1,0 +1,46 @@
+﻿@model HomeIndexViewModel
+
+@{
+    ViewData["Title"] = "Usages for devices";
+}
+
+<h2>Devices</h2>
+<div align="right">
+    <a asp-controller="Usages" asp-action="Create" class="btn btn-default">
+        Create a new usage
+    </a>
+</div>
+
+<form method="post" asp-controller="Home" asp-action="Index">
+    <div class="=form-group">
+        Device:
+        <select asp-for="SelectedDeviceId" asp-items="Model.DevicesSelectList" class="form-control" onchange="this.form.submit()"></select>
+    </div>
+    <hr />
+
+    <table class="table table-striped">
+        <tr>
+            <th>SerialNumber</th>
+            <th>DeviceName</th>
+            <th>PersonName</th>
+            <th>From</th>
+            <th>To</th>
+        </tr>
+        @foreach (var usage in Model.DeviceUsages)
+        {
+            <tr>
+                <td>@usage.SerialNumber</td>
+                <td>@usage.DeivceName</td>
+                <td>@usage.PersonName</td>
+                <td>@usage.From.ToString("dd.MM.yyyy")</td>
+                <td>@usage.To?.ToString("dd.MM.yyyy")</td>
+                <td>
+                    <a asp-controller="Usages" asp-action="Edit" asp-route-id="@usage.Id">Edit</a> |
+                    <a asp-controller="Usages" asp-action="Delete" asp-route-id="@usage.Id">Delete</a>
+                </td>
+            </tr>
+
+        }
+    </table>
+
+</form>
