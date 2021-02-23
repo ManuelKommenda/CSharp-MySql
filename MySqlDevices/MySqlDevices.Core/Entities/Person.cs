@@ -10,7 +10,6 @@ namespace MySqlDevices.Core.Entities
         public byte[] RowVersion { get; set; }
         public string LastName { get; set; }
         public string FirstName { get; set; }
-        [EmailAddress]
         public string MailAdress { get; set; }
         public string FullName => FirstName + " " + LastName;
         public ICollection<Usage> Usages { get; set; }
