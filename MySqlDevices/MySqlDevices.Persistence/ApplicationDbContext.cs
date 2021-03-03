@@ -22,7 +22,42 @@ namespace MySqlDevices.Persistence
             var connectionString = configuration["ConnectionStrings:DefaultConnection"];
 
             //Todo
-            
+            optionsBuilder.UseMySQL(connectionString);
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Person>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.RowVersion).IsConcurrencyToken();
+                entity.Property(e => e.FirstName).IsRequired().HasMaxLength(40);
+                entity.Property(e => e.LastName).IsRequired().HasMaxLength(40);
+                entity.Property(e => e.MailAdress).IsRequired().HasMaxLength(60);
+                entity.HasMany(e => e.Usages).WithOne(u => u.Person);
+            });
+
+            modelBuilder.Entity<Device>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.RowVersion).IsConcurrencyToken();
+                entity.Property(e => e.SerialNumber).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.Name).IsRequired().HasMaxLength(40);
+                entity.Property(e => e.DeviceType).IsRequired();
+                entity.HasMany(e => e.Usages).WithOne(u => u.Device);
+            });
+
+            modelBuilder.Entity<Usage>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.RowVersion).IsConcurrencyToken();
+                entity.Property(e => e.From).IsRequired();
+                entity.Property(e => e.To);
+                entity.HasOne(e => e.Person).WithMany(u => u.Usages).HasForeignKey(e => e.PersonId);
+                entity.HasOne(e => e.Device).WithMany(u => u.Usages).HasForeignKey(e => e.DeviceId);
+            });
         }
     }
 }

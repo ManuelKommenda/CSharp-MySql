@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  # MySQL
+  db:
+    container_name: mysql8
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: devices
+      MYSQL_USER: sandbox_user
+      MYSQL_PASSWORD: passme
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    ports:
+      - '3306:3306'
+    volumes:
+      - './docker/db/data:/var/lib/mysql'
+      - './docker/db/my.cnf:/etc/mysql/conf.d/my.cnf'
+      - './docker/db/sql:/docker-entrypoint-initdb.d'
+
+  phpmyadmin:
+    container_name: phpMyAdmin
+    depends_on:
+    - db
+    image: phpmyadmin/phpmyadmin
+    restart: unless-stopped
+    ports:
+    - '8080:80'
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: root

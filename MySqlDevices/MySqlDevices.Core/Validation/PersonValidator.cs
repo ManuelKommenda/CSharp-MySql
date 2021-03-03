@@ -8,10 +8,13 @@ using MySqlDevices.Core.Entities;
 
 namespace MySqlDevices.Core.Validation
 {
-    public class PersonValidator
+    public class PersonValidator : AbstractValidator<Person>
     {
         public PersonValidator()
         {
+            RuleFor(p => p.MailAdress)
+                .EmailAddress()
+                .WithMessage("Vaild email is required");
         }
     }
 }
